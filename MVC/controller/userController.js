@@ -33,6 +33,7 @@ const postUser = async (req, res) => {
         const hashPassword = await bcrypt.hash(password, 10) //for encryption
 
         const ifUserAlreadyExist = await userModel.findOne({email})
+
         if(ifUserAlreadyExist){
             return res.status(401).json({message: "user already exits"})
         }
