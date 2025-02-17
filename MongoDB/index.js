@@ -42,7 +42,7 @@ app.get("/", async (req, res) => {
 app.post("/", async (req, res) => {
     try{
         const {title, yearPublished, author, category} = req.body;
-        const postBook = new bookModel({
+        const postBook = await bookModel.create({
             title,
             yearPublished,
             author,
@@ -84,7 +84,7 @@ app.patch("/:id", async (req, res) => {
     }
 });
 
-app.delete("/:id", async (req, res) => {
+app.delete("/deleteById/:id", async (req, res) => {
     try{
         const {id} = req.params;
         const deleteBook = await bookModel.findByIdAndDelete(id);

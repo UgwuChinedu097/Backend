@@ -34,28 +34,29 @@ app.post("/", (req, res) =>  {
 })
 
 app.get("/:id", (req, res) => {
-    let { id } = req.params;
-    id = parseInt(id);
+  let { id } = req.params;
+  id = parseInt(id);
   
-    const getUser = users.findIndex((e) => e.id === id);
-    if (getUser === -1) {
-      res.status(404).json({ message: "user not found" });
-    } else {
-      res
-        .status(200)
-        .json({ message: "user gotten successfully", data: toDoLIst[getUser] });
-    }
-  });
+  const getUser = users.findIndex((e) => e.id === id);
+  if (getUser === -1) {
+  res.status(404).json({ message: "user not found" });
+  } else {
+    res
+    .status(200)
+    .json({ message: "user gotten successfully", data: toDoLIst[getUser] });
+  }
+});
   
+
   // delete a user
-  app.delete("/:id", (req, res) => {
+app.delete("/:id", (req, res) => {
     const getUser = users.filter((e) => e.id !== parseInt(req.params.id));
     users = getUser;
     res.status(404).json({ messgae: "user deleted successfully" });
-  });
+});
   
   // update
-  app.patch("/:id", (req, res) => {
+app.patch("/:id", (req, res) => {
     const getUser = users.find((e) => e.id === parseInt(req.params.id));
   
     if (getUser) {
@@ -69,7 +70,7 @@ app.get("/:id", (req, res) => {
     } else {
       res.status(404).json({ message: "user not found" });
     }
-  });
+});
 
 //Not Found
 app.all('*', (req,res) =>{

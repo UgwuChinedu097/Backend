@@ -36,6 +36,7 @@ app.patch("/:id", (req, res) => {
     if (description) update.description = description;
     if (status) update.status = status;
     if (priority) update.priority = priority;
+    if(dueDate) update.dueDate = dueDate
 
     res.status(200).json({ messge: "udated", data: req.body });
   } else {

@@ -1,0 +1,41 @@
+{
+	"info": {
+		"_postman_id": "f5443153-5313-494e-8aa6-8538a3bde0ce",
+		"name": "Book",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19281542"
+	},
+	"item": [
+		{
+			"name": "get all books",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"Atomic Habits\",\r\n  \"author\": \"James Clear\",\r\n  \"category\": \"Self-Improvement\",\r\n  \"yearPublished\": 2030\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:2932/67a9fbddc76cd1aa681148a0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "2932",
+					"path": [
+						"67a9fbddc76cd1aa681148a0"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
