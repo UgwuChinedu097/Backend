@@ -10,28 +10,47 @@ const getAllLogin = async (req, res) => {
   }
 };
 
+// const postLogin = async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+//     const hashPassword = await bcrypt.hash(password, 10) 
+//     const login = await loginModel.findOne({ email });
+//     if (login) {
+//       if (email && password) {
+//         const createUser = await loginModel.create({
+//           email,
+//           password: hashPassword,
+//         });
+//         return res.status(201).json({Message: "user created successfully",data: createUser})
+//       }else{
+//         return res.status(400).json({message: 'all field are required'})
+//       }
+//     }else{
+//         return res.status(409).json({message: "email already exits"})
+//     }
+//   } catch (err) {
+//     res.status(500).json({ msg: "Server error" });
+//   }
+// };
+
+
+// correction
 const postLogin = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const hashPassword = await bcrypt.hash(password, 10) 
-    const login = await loginModel.findOne({ email });
-    if (!login) {
-      if (email && password) {
-        const createUser = await loginModel.create({
-          email,
-          password: hashPassword,
-        });
-        return res.status(201).json({Message: "user created successfully",data: createUser})
-      }else{
-        return res.status(400).json({message: 'all field are required'})
-      }
-    }else{
-        return res.status(409).json({message: "email already exits"})
+    const {email, password} = req.body
+    const loginAll = await loginModel.findOne({email})
+    if(!login || !login.password === password){
+      return res.status(401).json({mesage: "no email or password"})
     }
-  } catch (err) {
-    res.status(500).json({ msg: "Server error" });
+    const checkPassword = await bcrypt.compare(password, loginAll.password)
+    if(!checkPassword){
+      return res.status(401).json({message: "no email or password"})
+    }
+    return res.status(200).json({staus: true, data:[loginAll.email, loginAll.password ]})
+  } catch (error) {
+    return res.status(500).json({message: "An error occured", error})
   }
-};
+}
 
 const getLoginById = async (req, res) => {
     try {
@@ -51,7 +70,7 @@ const updateById = async (req, res) => {
         const { id } = req.params
         const { password } = req.body
         const hashPassword = await bcrypt.hash(password, 10) 
-        const updateid = await loginModel.findByIdAndUpdate(id, {password: hashPassword, }, {new: true})
+        const updateid = await loginModel.findByIdAndUpdate(id, { password: hashPassword }, {new: true})
         if(!updateid){
             return res.status(404).json({Message: "User does not exits"})
         }
