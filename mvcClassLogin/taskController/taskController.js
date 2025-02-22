@@ -68,15 +68,17 @@ const updateTask = async  (req, res) => {
         const {title, description, completed} = req.body
         const {userId , taskId} = req.params
         const findUser = await taskModel.findById(userId)
+        // check for user with the id
         if(!findUser){
             return res.status(404).json({message:"user not found"})
         }
-
+        // check for userId through taskId 
         const findByTask = findUser.task.id(taskId)
         if(!findByTask){
             return res.status(404).json({message: 'task does not exits'})
         }
 
+        // then update task
         if (title) findByTask.title = title
         if(description) findByTask.description = description
         if(typeof completed === "boolean") findByTask.completed = completed
