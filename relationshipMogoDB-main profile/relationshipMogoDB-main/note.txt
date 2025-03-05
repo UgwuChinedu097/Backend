@@ -1,0 +1,3 @@
+Dependencies we'll need to install
+npm init --y
+npm i bcrypt dotenv express mongoose morgan
