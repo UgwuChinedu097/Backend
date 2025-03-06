@@ -1,27 +1,31 @@
 const detailModel = require("../model/detailModel");
-const userModel = require("../model/userModel")
+const userModel = require("../model/userModel");
 
 const createUserDetails = async (req, res) => {
   try {
-    const {userId, age, address} = req.body
+    const { userId, age, address } = req.body;
 
-    const getUser = await userModel.findById(userId)
+    const getUser = await userModel.findById(userId);
 
-    if(!getUser){
-        return res.status(404).json({message: "You don't have an account, please sign up"})
+    if (!getUser) {
+      return res
+        .status(404)
+        .json({ message: "You don't have an account, please sign up" });
     }
+
     const createDetails = new detailModel({
-        age,
-        address, 
-        user: getUser._id,
-    })
+      age,
+      address,
+      user: getUser._id,
+    });
 
-    createDetails.save()
-    getUser.details = createDetails._id
-    await getUser.save()
+    createDetails.save();
+    getUser.details = createDetails._id;
+    await getUser.save();
 
-    return res.status(200).json({message: " user details created", data: createDetails})
-
+    return res
+      .status(200)
+      .json({ message: " user details created", data: createDetails });
   } catch (error) {
     return res
       .status(500)
@@ -29,5 +33,22 @@ const createUserDetails = async (req, res) => {
   }
 };
 
+const updateDetails = async (req, res) => {
+  try {
+    const findUpdateDetails = await detailModel.findByIdAndUpdate(req.params.id, req.body, {new: true});
 
-module.exports = {createUserDetails}
+    if(!findUpdateDetails){
+      return res
+      .status(404)
+      .json({ message: "Details not found" });
+    }
+
+    return res.status(200).json({message: "update successfully", data: findUpdateDetails})
+  } catch (error) {
+     return res
+    .status(500)
+    .json({ message: "An error occured", error: error || error?.message })
+  }
+};
+
+module.exports = { createUserDetails, updateDetails };
