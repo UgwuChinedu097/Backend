@@ -10,7 +10,7 @@ const { PORT } = process.env;
 const app = Express();
 app.use(Express.json());
 app.use('/auth', userRouter)
-app.use("/wallets", walletsRouter)
+app.use("/wallet", walletsRouter)
 app.use(morgan("dev"));
 
 db();

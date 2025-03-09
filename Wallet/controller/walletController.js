@@ -1,31 +1,34 @@
-const userModel = require('../model/userModel')
-const wallletsModel = require('../model/walletModel')
+const userModel = require("../model/userModel");
+const walletModel = require("../model/walletModel");
 
 
-const createWallets = async (req, res) => {
+const createWallet = async (req, res) => {
   try {
-    const {userId, owner, balance, currency} = req.body
-    const getUser = await userModel.findById(userId)
-    if(!getUser){
-      return res.status(409).json({ message: "You don't have an account, please sign up" })
+    const { userId } = req.params; 
+    const { balance, currency } = req.body;
+
+    const getUser = await userModel.findById(userId);
+    if (!getUser) {
+      return res.status(404).json({ message: "User not found, please sign up" });
     }
-    
-    const newWallets = new wallletsModel({
-      owner,
+
+    if (getUser.wallet) {
+      return res.status(400).json({ message: "User already has a wallet" });
+    }
+
+    const newWallet = await walletModel.create({
       balance,
       currency,
-      user: getUser._id
-    })
-    
-    newWallets.save()
-    getUser.wallets = newWallets._id
-    await getUser.save()
+      owner: getUser._id,
+    });
 
-    return res.status(201).json({message: "User created successfully", data: newWallets })
+    getUser.wallet = newWallet._id;
+    await getUser.save();
+    return res.status(201).json({ message: "Wallet created successfully", data: newWallet });
   } catch (error) {
-    return res.status(500).json({message: error.message})
+    return res.status(500).json({ message: error.message });
   }
-}
+};
 
 
-module.exports = {createWallets}
+module.exports = { createWallet };
